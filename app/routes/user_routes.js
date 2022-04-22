@@ -15,7 +15,7 @@ const errors = require('../../lib/custom_errors')
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
-const User = require('../models/user')
+const Guest = require('../models/guest')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -27,7 +27,7 @@ const router = express.Router()
 
 // SIGN UP
 // POST /sign-up
-router.post('/sign-up', (req, res, next) => {
+router.post('/guest/sign-up', (req, res, next) => {
 	// start a promise chain, so that any errors will pass to `handle`
 	Promise.resolve(req.body.credentials)
 		// reject any requests where `credentials.password` is not present, or where
@@ -52,7 +52,7 @@ router.post('/sign-up', (req, res, next) => {
 			}
 		})
 		// create user with provided email and hashed password
-		.then((user) => User.create(user))
+		.then((user) => Guest.create(user))
 		// send the new user object back with status 201, but `hashedPassword`
 		// won't be send because of the `transform` in the User model
 		.then((user) => res.status(201).json({ user: user.toObject() }))
@@ -62,12 +62,12 @@ router.post('/sign-up', (req, res, next) => {
 
 // SIGN IN
 // POST /sign-in
-router.post('/sign-in', (req, res, next) => {
+router.post('/guest/sign-in', (req, res, next) => {
 	const pw = req.body.credentials.password
 	let user
 
 	// find a user based on the email that was passed
-	User.findOne({ email: req.body.credentials.email })
+	Guest.findOne({ email: req.body.credentials.email })
 		.then((record) => {
 			// if we didn't find a user with that email, send 401
 			if (!record) {
@@ -102,10 +102,10 @@ router.post('/sign-in', (req, res, next) => {
 
 // CHANGE password
 // PATCH /change-password
-router.patch('/change-password', requireToken, (req, res, next) => {
+router.patch('/guest/change-password', requireToken, (req, res, next) => {
 	let user
 	// `req.user` will be determined by decoding the token payload
-	User.findById(req.user.id)
+	Guest.findById(req.user.id)
 		// save user outside the promise chain
 		.then((record) => {
 			user = record
@@ -134,7 +134,7 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-router.delete('/sign-out', requireToken, (req, res, next) => {
+router.delete('/guest/sign-out', requireToken, (req, res, next) => {
 	// create a new random token for the user, invalidating the current one
 	req.user.token = crypto.randomBytes(16)
 	// save the token and respond with 204
