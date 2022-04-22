@@ -45,7 +45,7 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 
 // INDEX
 // get all happy hours in a city with a specific tag
-router.get('/happy-hours/:city/:tag', requireToken, (req, res, next)=>{
+router.get('/happy-hours/index/:city/:tag', requireToken, (req, res, next)=>{
     HappyHour.find({city : `${req.params.city}`, "tags.tag": `${req.params.tag}`})
         .then(handle404)
         .then(happyHours =>{
@@ -65,7 +65,7 @@ router.get('/happy-hours/:city/:tag', requireToken, (req, res, next)=>{
 
 //INDEX
 // get all happy hours a city
-router.get('/happy-hours/:city', requireToken, (req, res, next)=>{
+router.get('/happy-hours/index/:city', requireToken, (req, res, next)=>{
     HappyHour.find({city: `${req.params.city}`})
     .populate('owner')
         .then(happyHours => {
@@ -87,6 +87,7 @@ router.get('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
         .then(happyHour =>{
             res.status(200).json({happyHour: happyHour.toObject()})
         })
+        .catch(next)
 })
 
 
@@ -115,6 +116,19 @@ router.patch('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
             res.sendStatus(204)
         })
         .catch(next)
+})
+
+// DELETE
+// DELETE /happy-hours/6262e33e498820d71d0ec27e
+router.delete('/happy-hours/:happyHourId', requireToken, (req, res, next)=>{
+    id = req.params.happyHourId
+    HappyHour.findById(id)
+        .then(handle404)
+        .then(happyHour =>{
+            requireOwnership(req, happyHour)
+            happyHour.deleteOne()
+        })
+        .then(()=>res.sendStatus(204))
 })
 
 
