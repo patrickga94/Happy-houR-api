@@ -65,5 +65,21 @@ router.post('/happy-hours', requireToken, (req, res, next)=>{
         .catch(next)
 })
 
+// UPDATE
+//PATCH /happy-hours/6262e33e498820d71d0ec27e
+router.patch('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
+    id = req.params.happyHourid
+    HappyHour.findById(id)
+        .then(handle404)
+        .then(happyHour => {
+            requireOwnership(req, happyHour)
+            return happyHour.updateOne(req.body.happyHour)
+        })
+        .then(happyHour => {
+            res.sendStatus(204)
+        })
+        .catch(next)
+})
+
 
 module.exports = router
