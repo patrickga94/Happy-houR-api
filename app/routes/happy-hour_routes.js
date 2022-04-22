@@ -42,6 +42,20 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 
 })
 
+//INDEX
+// get all happy hours a city
+router.get('/happy-hours/:city', requireToken, (req, res, next)=>{
+    HappyHour.find({city: `${req.params.city}`})
+    .populate('owner')
+        .then(happyHours => {
+            return happyHours.map(happyHour => happyHour.toObject())
+        })
+        .then(happyHours => {
+            res.status(200).json({happyHours: happyHours})
+        })
+        .catch(next)
+})
+
 // SHOW
 //GET /happy-hours/6262e33e498820d71d0ec27e
 router.get('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
