@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const HappyHour = require('./happy-hour')
+
+const { Schema } = mongoose
 
 const guestSchema = new mongoose.Schema(
 	{
@@ -12,6 +15,11 @@ const guestSchema = new mongoose.Schema(
 			required: true,
 			unique: true
 		},
+		city: {
+			type: String,
+			required: true
+		},
+		favorites: [{type: Schema.Types.ObjectId, ref: 'HappyHour'}],
 		hashedPassword: {
 			type: String,
 			required: true,
