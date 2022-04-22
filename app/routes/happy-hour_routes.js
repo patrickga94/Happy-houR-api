@@ -28,6 +28,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 // INDEX
+//get all happy hours
 router.get('/happy-hours', requireToken, (req, res, next)=>{
     HappyHour.find()
     .populate('owner')
@@ -37,7 +38,20 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
         .then(happyHours => {
             res.status(200).json({happyHours: happyHours})
         })
+        .catch(next)
 
+})
+
+
+// CREATE
+//POST /happy-hours
+router.post('/happy-hours', requireToken, (req, res, next)=>{
+    req.body.happyHour.owner = req.user.id
+    HappyHour.create(req.body.happyHour)
+        .then(happyHour =>{
+            res.status(201).json({happyHour: happyHour.toObject()})
+        })
+        .catch(next)
 })
 
 

@@ -28,7 +28,7 @@ const happyHourSchema = new mongoose.Schema(
             ref: 'Establishment'
         },
         days: [{type: String, required: true}],
-        hours: [{type: Number, required: true}],
+        hours: [{type: Number, maxlength: 2, required: true}],
         comments: [commentSchema],
         tags: [tagSchema]
 
