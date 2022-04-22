@@ -42,6 +42,27 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 
 })
 
+
+// INDEX
+// get all happy hours in a city with a specific tag
+router.get('/happy-hours/:city/:tag', requireToken, (req, res, next)=>{
+    HappyHour.find({city : `${req.params.city}`, "tags.tag": `${req.params.tag}`})
+        .then(handle404)
+        .then(happyHours =>{
+            console.log('city', req.params.city)
+            console.log('tag', req.params.tag)
+            console.log('the happy hours',happyHours)
+            return happyHours
+        })
+        .then(happyHours => {
+            return happyHours.map(happyHour => happyHour.toObject())
+        })
+        .then(happyHours => {
+            res.status(200).json({happyHours: happyHours})
+        })
+        .catch(next)
+})
+
 //INDEX
 // get all happy hours a city
 router.get('/happy-hours/:city', requireToken, (req, res, next)=>{
@@ -55,6 +76,7 @@ router.get('/happy-hours/:city', requireToken, (req, res, next)=>{
         })
         .catch(next)
 })
+
 
 // SHOW
 //GET /happy-hours/6262e33e498820d71d0ec27e
