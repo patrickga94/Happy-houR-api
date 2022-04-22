@@ -2,20 +2,16 @@
 // import dependencies
 /////////////////////////////////
 const mongoose = require('mongoose')
-const { Schema, model } = mongoose
+const {Schema} = mongoose
 
 
-// here's an alternate syntax for creating a schema
-// reminder: we do not need a model for a subdocument
-// all we need is a schema 
 const commentSchema = new mongoose.Schema({
     note: {
         type: String,
         required: true
     },
     author: {
-        type: String,
-        required: true
+        type: String
     },
     owner: {
         type: Schema.Types.ObjectId,

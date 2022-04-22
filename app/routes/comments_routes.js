@@ -32,9 +32,9 @@ const router = express.Router()
 // CREATE
 // POST a comment route
 router.post('/comments/:happyHourId', requireToken, (req, res, next)=>{
-    const comment = req.body.comment
-    req.body.comment.owner = req.user.id
     req.body.comment.author = req.user.username
+    req.body.comment.owner = req.user.id
+    const comment = req.body.comment
     const id = req.params.happyHourId
     HappyHour.findById(id)
         .then(handle404)
