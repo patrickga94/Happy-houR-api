@@ -42,6 +42,17 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 
 })
 
+// SHOW
+//GET /happy-hours/6262e33e498820d71d0ec27e
+router.get('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
+    id = req.params.happyHourid
+    HappyHour.findById(id)
+        .then(handle404)
+        .then(happyHour =>{
+            res.status(200).json({happyHour: happyHour.toObject()})
+        })
+})
+
 
 // CREATE
 //POST /happy-hours
