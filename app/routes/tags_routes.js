@@ -34,6 +34,22 @@ router.post('/tags/:happyHourId', requireToken, (req, res, next)=>{
         .catch(next)
 })
 
+// DELETE
+router.delete('/tags/:happyHourId/:tagId', requireToken, (req,res,next)=>{
+    const hhId = req.params.happyHourId
+    const tagId = req.params.tagId
+    HappyHour.findById(hhId)
+        .then(handle404)
+        .then(happyHour => {
+            const theTag = happyHour.tags.id(tagId)
+            requireOwnership(req, happyHour)
+            theTag.remove()
+            return happyHour.save()
+        })
+        .then(()=> res.sendStatus(204))
+        .catch(next)
+})
+
 
 
 
