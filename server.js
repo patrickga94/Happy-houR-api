@@ -8,6 +8,7 @@ const cors = require('cors')
 const guestRoutes = require('./app/routes/guest_routes')
 const establishmentRoutes = require('./app/routes/establishment_routes')
 const happyHourRoutes = require('./app/routes/happy-hour_routes')
+const tagsRoutes = require('./app/routes/tags_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -71,6 +72,7 @@ app.use(requestLogger)
 app.use(guestRoutes)
 app.use(establishmentRoutes)
 app.use(happyHourRoutes)
+app.use(tagsRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
