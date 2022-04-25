@@ -129,6 +129,7 @@ router.delete('/happy-hours/:happyHourId', requireToken, (req, res, next)=>{
             happyHour.deleteOne()
         })
         .then(()=>res.sendStatus(204))
+        .catch(next)
 })
 
 
