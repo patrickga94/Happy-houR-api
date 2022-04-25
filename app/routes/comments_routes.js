@@ -33,7 +33,8 @@ const router = express.Router()
 // POST a comment route
 router.post('/comments/:happyHourId', requireToken, (req, res, next)=>{
     // req.body.comment.author = req.user.username
-    req.body.comment.owner = req.user.username
+    req.body.comment.owner = req.user
+    req.body.comment.author = req.user.username
     const comment = req.body.comment
     const id = req.params.happyHourId
     HappyHour.findById(id)
