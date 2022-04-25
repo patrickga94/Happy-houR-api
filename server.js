@@ -22,7 +22,7 @@ const db = require('./config/db')
 
 // require configured passport authentication middleware
 const auth = require('./lib/auth')
-const establishmentAuth = require('./lib/establishment-auth')
+// const establishmentAuth = require('./lib/establishment-auth')
 
 // define server and client ports
 // used for cors and local port declaration
@@ -58,7 +58,6 @@ app.use(replaceToken)
 
 // register passport authentication middleware
 app.use(auth)
-app.use(establishmentAuth)
 // add `express.json` middleware which will parse JSON requests into
 // JS objects before they reach the route files.
 // The method `.use` sets up middleware for the Express application

@@ -3,7 +3,7 @@ const HappyHour = require('./happy-hour')
 
 const { Schema } = mongoose
 
-const guestSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
 	{
 		email: {
 			type: String,
@@ -16,8 +16,12 @@ const guestSchema = new mongoose.Schema(
 			unique: true
 		},
 		city: {
-			type: String,
-			required: true
+			type: String
+		},
+		isGuest: {
+			type: Boolean,
+			required: true,
+			default: true
 		},
 		favorites: [{type: Schema.Types.ObjectId, ref: 'HappyHour'}],
 		hashedPassword: {
@@ -38,4 +42,4 @@ const guestSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('Guest', guestSchema)
+module.exports = mongoose.model('User', userSchema)

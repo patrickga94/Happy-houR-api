@@ -15,7 +15,7 @@ const errors = require('../../lib/custom_errors')
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
-const Establishment = require('../models/establishment')
+const User = require('../models/users')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -47,12 +47,14 @@ router.post('/establishment/sign-up', (req, res, next) => {
 			// return necessary params to create a user
 			return {
 				email: req.body.credentials.email,
+				username: req.body.credentials.username,
+				isGuest: false,
 				hashedPassword: hash,
 				name: req.body.credentials.name,
 			}
 		})
 		// create user with provided email and hashed password
-		.then((user) => Establishment.create(user))
+		.then((user) => User.create(user))
 		// send the new user object back with status 201, but `hashedPassword`
 		// won't be send because of the `transform` in the User model
 		.then((user) => res.status(201).json({ user: user.toObject() }))
@@ -67,7 +69,7 @@ router.post('/establishment/sign-in', (req, res, next) => {
 	let user
 
 	// find a user based on the email that was passed
-	Establishment.findOne({ email: req.body.credentials.email })
+	User.findOne({ email: req.body.credentials.email })
 		.then((record) => {
 			// if we didn't find a user with that email, send 401
 			if (!record) {
@@ -105,7 +107,7 @@ router.post('/establishment/sign-in', (req, res, next) => {
 router.patch('/establishment/change-password', requireToken, (req, res, next) => {
 	let user
 	// `req.user` will be determined by decoding the token payload
-	Establishment.findById(req.user.id)
+	User.findById(req.user.id)
 		// save user outside the promise chain
 		.then((record) => {
 			user = record

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const commentSchema = require('./comments')
 const tagSchema = require('./tags')
-const Establishment = require('./establishment')
+const User = require('./users')
 const { Schema } = mongoose
 
 const happyHourSchema = new mongoose.Schema(
@@ -25,7 +25,7 @@ const happyHourSchema = new mongoose.Schema(
         },
         owner: {
             type: Schema.Types.ObjectId,
-            ref: 'Establishment'
+            ref: 'User'
         },
         days: [{type: String, required: true}],
         hours: [{type: Number, maxlength: 2, required: true}],
