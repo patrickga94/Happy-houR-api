@@ -98,6 +98,7 @@ router.get('/happy-hours/index/:city', requireToken, (req, res, next)=>{
 router.get('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
     id = req.params.happyHourid
     HappyHour.findById(id)
+    .populate('owner')
         .then(handle404)
         .then(happyHour =>{
             res.status(200).json({happyHour: happyHour.toObject()})
@@ -122,6 +123,7 @@ router.post('/happy-hours', requireToken, (req, res, next)=>{
 router.patch('/happy-hours/:happyHourid', requireToken, (req, res, next)=> {
     id = req.params.happyHourid
     HappyHour.findById(id)
+    .populate('owner')
         .then(handle404)
         .then(happyHour => {
             requireOwnership(req, happyHour)
