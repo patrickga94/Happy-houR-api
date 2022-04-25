@@ -42,6 +42,21 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 
 })
 
+// INDEX
+//get all of a user's happy hours
+router.get('/happy-hours/mine', requireToken, (req, res, next)=>{
+    HappyHour.find({owner: req.user._id})
+    .populate('owner')
+        .then(happyHours => {
+            return happyHours.map(happyHour => happyHour.toObject())
+        })
+        .then(happyHours => {
+            res.status(200).json({happyHours: happyHours})
+        })
+        .catch(next)
+
+})
+
 
 // INDEX
 // get all happy hours in a city with a specific tag
