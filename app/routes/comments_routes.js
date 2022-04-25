@@ -32,7 +32,6 @@ const router = express.Router()
 // CREATE
 // POST a comment route
 router.post('/comments/:happyHourId', requireToken, (req, res, next)=>{
-    // req.body.comment.author = req.user.username
     req.body.comment.owner = req.user
     req.body.comment.author = req.user.username
     const comment = req.body.comment
@@ -45,6 +44,24 @@ router.post('/comments/:happyHourId', requireToken, (req, res, next)=>{
         })
         .then(happyHour =>{
             res.status(201).json({happyHour: happyHour})
+        })
+        .catch(next)
+})
+
+// DELETE
+// Remove a comment
+router.delete('/comments/:happyHourId/:commentId', requireToken, (req, res, next)=> {
+    HappyHour.findById(req.params.happyHourId)
+        .populate('comments.owner')
+        .then(handle404)
+        .then(happyHour => {
+            const theComment = happyHour.comments.id(req.params.commentId)
+            requireOwnership(req, theComment)
+            theComment.remove()
+            return happyHour.save()
+        })
+        .then(()=>{
+            res.sendStatus(204)
         })
         .catch(next)
 })
