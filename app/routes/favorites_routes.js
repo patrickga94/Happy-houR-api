@@ -49,5 +49,21 @@ router.post('/favorites/:happyHourId', requireToken, (req, res, next)=>{
         .catch(next)
 })
 
+// DELETE
+// remove a Happy Hour from a user's favorites
+router.delete('/favorites/:happyHourId', requireToken, (req, res, next)=>{
+    id = req.params.happyHourId
+    User.findById(req.user._id)
+        .then(user =>{
+           user.favorites.pull(id)
+           return user.save()
+
+        })
+        .then(user =>{
+            res.sendStatus(204)
+        })
+        .catch(next)
+})
+
 
 module.exports = router
