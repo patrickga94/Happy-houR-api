@@ -61,7 +61,13 @@ router.get('/happy-hours/mine', requireToken, (req, res, next)=>{
 // INDEX
 //get all happy hours a user has favorited
 router.get('/happy-hours/favorites', requireToken, (req, res, next)=>{
-    HappyHour.find({id: {$in: req.user.favorites}})
+    console.log('favorites', req.user.favorites)
+    let faveArray = req.user.favorites.map(happyHour => {
+        console.log(happyHour._id.toString())
+        return happyHour._id.toString()
+    })
+    console.log('faveArray', faveArray)
+    HappyHour.find({_id: {$in: faveArray}})
     .populate('owner')
         .then(happyHours => {
             return happyHours.map(happyHour => happyHour.toObject())
