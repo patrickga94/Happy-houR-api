@@ -32,6 +32,7 @@ const router = express.Router()
 router.get('/happy-hours', requireToken, (req, res, next)=>{
     HappyHour.find()
     .populate('owner')
+    .populate('tags')
         .then(happyHours => {
             return happyHours.map(happyHour => happyHour.toObject())
         })
@@ -46,6 +47,21 @@ router.get('/happy-hours', requireToken, (req, res, next)=>{
 //get all of a user's happy hours
 router.get('/happy-hours/mine', requireToken, (req, res, next)=>{
     HappyHour.find({owner: req.user._id})
+    .populate('owner')
+        .then(happyHours => {
+            return happyHours.map(happyHour => happyHour.toObject())
+        })
+        .then(happyHours => {
+            res.status(200).json({happyHours: happyHours})
+        })
+        .catch(next)
+
+})
+
+// INDEX
+//get all happy hours a user has favorited
+router.get('/happy-hours/favorites', requireToken, (req, res, next)=>{
+    HappyHour.find({id: {$in: req.user.favorites}})
     .populate('owner')
         .then(happyHours => {
             return happyHours.map(happyHour => happyHour.toObject())
