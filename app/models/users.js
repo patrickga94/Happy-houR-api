@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const HappyHour = require('./happy-hour')
+// const HappyHour = require('./happy-hour')
 
 const { Schema } = mongoose
 
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			default: true
 		},
-		favorites: [{type: Schema.Types.ObjectId, ref: 'HappyHour'}],
+		favorites: [{type: String}],
 		hashedPassword: {
 			type: String,
 			required: true,

@@ -5,6 +5,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for examples
 const HappyHour = require('../models/happy-hour')
+const mongoose = require('mongoose')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -62,12 +63,12 @@ router.get('/happy-hours/mine', requireToken, (req, res, next)=>{
 //get all happy hours a user has favorited
 router.get('/happy-hours/favorites', requireToken, (req, res, next)=>{
     console.log('favorites', req.user.favorites)
-    let faveArray = req.user.favorites.map(happyHour => {
-        console.log(happyHour._id.toString())
-        return happyHour._id.toString()
-    })
-    console.log('faveArray', faveArray)
-    HappyHour.find({_id: {$in: faveArray}})
+    // let faveArray = req.user.favorites.map(happyHour => {
+    //     return happyHour._id.toString()
+    // })
+    let objectIdArray = req.user.favorites.map(s => mongoose.Types.ObjectId(s));
+    console.log('objectIdArray', objectIdArray )
+    HappyHour.find({_id: {$in: objectIdArray}})
     .populate('owner')
         .then(happyHours => {
             return happyHours.map(happyHour => happyHour.toObject())
@@ -84,6 +85,7 @@ router.get('/happy-hours/favorites', requireToken, (req, res, next)=>{
 // get all happy hours in a city with a specific tag
 router.get('/happy-hours/index/:city/:tag', requireToken, (req, res, next)=>{
     HappyHour.find({city : `${req.params.city}`, "tags.tag": `${req.params.tag}`})
+    .populate('owner')
         .then(handle404)
         .then(happyHours =>{
             console.log('city', req.params.city)

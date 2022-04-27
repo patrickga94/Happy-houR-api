@@ -35,7 +35,7 @@ router.post('/favorites/:happyHourId', requireToken, (req, res, next)=>{
     HappyHour.findById(id)
         .then(handle404)
         .then(happyHour => {
-            req.user.favorites.push(happyHour)
+            req.user.favorites.push(id)
             return req.user.save()
         })
         .then(()=>{
@@ -59,8 +59,13 @@ router.delete('/favorites/:happyHourId', requireToken, (req, res, next)=>{
            return user.save()
 
         })
-        .then(user =>{
-            res.sendStatus(204)
+        .then(()=>{
+            User.findById(req.user._id)
+                .populate('favorites')
+                .then(user =>{
+                    res.status(201).json({user: user})
+                })
+
         })
         .catch(next)
 })
