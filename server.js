@@ -11,6 +11,7 @@ const happyHourRoutes = require('./app/routes/happy-hour_routes')
 const tagsRoutes = require('./app/routes/tags_routes')
 const commentsRoutes = require('./app/routes/comments_routes')
 const favoritesRoutes = require('./app/routes/favorites_routes')
+const placesRoutes = require('./app/routes/places-routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -77,6 +78,7 @@ app.use(happyHourRoutes)
 app.use(tagsRoutes)
 app.use(commentsRoutes)
 app.use(favoritesRoutes)
+app.use(placesRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
