@@ -5,7 +5,13 @@ const cors = require('cors')
 
 // require route files
 // const exampleRoutes = require('./app/routes/example_routes')
-const userRoutes = require('./app/routes/user_routes')
+const guestRoutes = require('./app/routes/guest_routes')
+const establishmentRoutes = require('./app/routes/establishment_routes')
+const happyHourRoutes = require('./app/routes/happy-hour_routes')
+const tagsRoutes = require('./app/routes/tags_routes')
+const commentsRoutes = require('./app/routes/comments_routes')
+const favoritesRoutes = require('./app/routes/favorites_routes')
+const placesRoutes = require('./app/routes/places-routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -18,6 +24,7 @@ const db = require('./config/db')
 
 // require configured passport authentication middleware
 const auth = require('./lib/auth')
+// const establishmentAuth = require('./lib/establishment-auth')
 
 // define server and client ports
 // used for cors and local port declaration
@@ -53,7 +60,6 @@ app.use(replaceToken)
 
 // register passport authentication middleware
 app.use(auth)
-
 // add `express.json` middleware which will parse JSON requests into
 // JS objects before they reach the route files.
 // The method `.use` sets up middleware for the Express application
@@ -66,7 +72,13 @@ app.use(requestLogger)
 
 // register route files
 // app.use(exampleRoutes)
-app.use(userRoutes)
+app.use(guestRoutes)
+app.use(establishmentRoutes)
+app.use(happyHourRoutes)
+app.use(tagsRoutes)
+app.use(commentsRoutes)
+app.use(favoritesRoutes)
+app.use(placesRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be

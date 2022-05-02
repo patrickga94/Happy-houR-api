@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
+// const HappyHour = require('./happy-hour')
 
-const guestSchema = new mongoose.Schema(
+const { Schema } = mongoose
+
+const userSchema = new mongoose.Schema(
 	{
 		email: {
 			type: String,
@@ -12,6 +15,15 @@ const guestSchema = new mongoose.Schema(
 			required: true,
 			unique: true
 		},
+		city: {
+			type: String
+		},
+		isGuest: {
+			type: Boolean,
+			required: true,
+			default: true
+		},
+		favorites: [{type: String}],
 		hashedPassword: {
 			type: String,
 			required: true,
@@ -30,4 +42,4 @@ const guestSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('Guest', guestSchema)
+module.exports = mongoose.model('User', userSchema)
