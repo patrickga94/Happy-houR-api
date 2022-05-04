@@ -2,135 +2,79 @@
 
 ### Erd
 
-![alt text](/Project%204%20ERD.jpg)
+![alt text](/Project-4-ERD.jpg)
 
-## API
+## Technologies
+- Mongoose
+- Express
+- Axios
+- Google Places API
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+## Installation Instructions
+- Fork and clone this
+- Run npm install to to install all necessary packages
+- Get an api key for the google places api
 
-Scripts are included in [`curl-scripts`](curl-scripts) to test built-in actions. Feel free to use Postman for testing, using the curl scripts listed below and in the folder for setting up headers and request bodies.
-Add your own scripts to test your custom API.
 
-### Authentication
+## Route Tables
 
-| Verb   | URI Pattern            | Controller#Action |
+### Establishment Authentication
+
+| Verb   | URI Pattern            | Controller Action |
 |--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/` | `users#changepw`  |
-| DELETE | `/sign-out/`        | `users#signout`   |
+| POST   | `establishment/sign-up`             | `users signup`    |
+| POST   | `establishment/sign-in`             | `users signin`    |
+| PATCH  | `establishment/change-password` | `users changepw`  |
+| DELETE | `establishment/sign-out`        | `users signout`   |
 
-#### POST /sign-up
+### Guest Authentication
 
-Request:
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| POST   | `guest/sign-up`             | `users signup`    |
+| POST   | `guest/sign-in`             | `users signin`    |
+| PATCH  | `guest/change-password` | `users changepw`  |
+| DELETE | `guest/sign-out`        | `users signout`   |
 
-```sh
-curl --include --request POST http://localhost:8000/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
+### Hapy hours
 
-```sh
-curl-scripts/sign-up.sh
-```
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| POST   | `/happy-hours`             | `create happy hour`    |
+| GET   | `/happy-hours`             | `index of all happy hours`    |
+| GET   | `/happy-hours/mine`             | `index of  user's happy hours`    |
+| GET   | `/happy-hours/favorites`             | `index of user's favorited happy hours`    |
+| GET   | `/happy-hours/index/:city`             | `index of happy hours in a city`    |
+| GET   | `/happy-hours/index/:city/:tag`             | `index of happy hours in a city with a tag`    |
+| GET   | `/happy-hours/:happyHourId`             | `show a happy hour`    |
+| PATCH  | `/happy-hours/:happyHourId` | `update happy hour`  |
+| DELETE | `/happy-hours/:happyHourId`        | `delete happy hour`   |
 
-Response:
+### Tags
 
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| POST   | `/tags/:happyHourId`             | `add tag to happy hour`    |
+| DELETE | `/tags/:happyHourId/:tagId`        | `remove tag from happy hour`   |
 
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
+### Comments
 
-#### POST /sign-in
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| POST   | `/comments/:happyHourId`             | `add comment to happy hour`    |
+| DELETE | `/comments/:happyHourId/:commentId`        | `remove comment from happy hour`   |
 
-Request:
+### Favorites
 
-```sh
-curl --include --request POST http://localhost:8000/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| POST   | `/favorites/:happyHourId`             | `add happy hour to user's favorites`    |
+| DELETE | `/favorites/:happyHourId`        | `remove happy hour from user's favorites`   |
 
-```sh
-curl-scripts/sign-in.sh
-```
+### Places
 
-Response:
+| Verb   | URI Pattern            | Controller Action |
+|--------|------------------------|-------------------|
+| GET   | `/places/:placeName/:apiKey`             | `get info from google places API`    |
 
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
 
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:8000/change-password/ \
-  --header "Authorization: Bearer $TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:8000/sign-out/ \
-  --header "Authorization: Bearer $TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
